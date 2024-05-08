@@ -1,70 +1,86 @@
-# Windows-basic-commands-batchscript
-Ex08-Windows-basic-commands-batchscript
 
+
+# Linux-File-IO-Systems-locking
+Ex07-Linux File-IO Systems-locking
 # AIM:
-To execute Windows basic commands and batch scripting
+To Write a C program that illustrates files copying and locking
 
 # DESIGN STEPS:
 
 ### Step 1:
 
-Navigate to any Windows environment installed on the system or installed inside a virtual environment like virtual box/vmware 
+Navigate to any Linux environment installed on the system or installed inside a virtual environment like virtual box/vmware or online linux JSLinux (https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192) or docker.
 
 ### Step 2:
 
-Write the Windows commands / batch file
-Save each script in a file with a .bat extension.
-Ensure you have the necessary permissions to perform the operations.
-Adapt paths as needed based on your system configuration.
+Write the C Program using Linux IO Systems locking
+
 ### Step 3:
 
-Execute the necessary commands/batch file for the desired output. 
+Execute the C Program for the desired output. 
 
+# PROGRAM:
 
+## 1.To Write a C program that illustrates files copying 
+```
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h> // Include for debugging
 
+int main() {
+    char block[1024];
+    int in, out;
+    int nread;
 
-# WINDOWS COMMANDS:
-## Exercise 1: Basic Directory and File Operations
-Create a directory named "MyLab" on the desktop.
+    // Open input file
+    in = open("filecopy.c", O_RDONLY);
+    if (in == -1) {
+        perror("Error opening input file");
+        exit(1);
+    }
+    printf("Input file opened successfully\n");
 
+    // Open or create output file
+    out = open("file.out", O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
+    if (out == -1) {
+        perror("Error opening/creating output file");
+        exit(1);
+    }
+    printf("Output file opened/created successfully\n");
 
-## COMMAND AND OUTPUT
+    // Read from input file and write to output file
+    while ((nread = read(in, block, sizeof(block))) > 0) {
+        printf("Read %d bytes from input file\n", nread);
+        if (write(out, block, nread) != nread) {
+            perror("Error writing to output file");
+            exit(1);
+        }
+        printf("Wrote %d bytes to output file\n", nread);
+    }
 
-Change to the "MyLab" directory and create an empty text file named "MyFile.txt" inside it.
+    if (nread == -1) {
+        perror("Error reading from input file");
+        exit(1);
+    }
 
+    printf("End of input file\n");
 
-## COMMAND AND OUTPUT
+    // Close files
+    close(in);
+    close(out);
 
-List the contents of the "MyLab" directory.
+    printf("Files closed successfully\n");
 
+    exit(0);
+}
+```
+# OUTPUT:
+![image](https://github.com/ramanpiritha/Linux-File-IO-Systems-locking/assets/147084116/058089f0-1a99-4939-926f-1060094c7120)
 
-## COMMAND AND OUTPUT
-
-Copy "MyFile.txt" to a new folder named "Backup" on the desktop.
-
-## COMMAND AND OUTPUT
-
-Move the "MyLab" directory to the "Documents" folder.
-
-
-## COMMAND AND OUTPUT
-
-
-## Exercise 2: Advanced Batch Scripting
-Create a batch script named "BackupScript.bat" that creates a backup of files with the ".docx" extension from the "Documents" folder to a new folder named "DocBackup" on the desktop.
-
-
-
-
-
-
-
-## OUTPUT
-
-
-
+![image](https://github.com/ramanpiritha/Linux-File-IO-Systems-locking/assets/147084116/be254a43-33e2-4780-b455-be4c2b89c707)
 
 
 # RESULT:
-The commands/batch files are executed successfully.
-
+The programs are executed successfully.
